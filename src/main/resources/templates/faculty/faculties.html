@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Faculties</title>
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+          integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
+          crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+<header th:insert="fragments/header.html :: header"></header>
+
+<div class="container">
+    <button type="button" class="btn btn-danger" data-toggle="modal"
+            data-target="#addModal" data-whatever="@mdo"> Add New Faculty</button>
+    <table class="table table-striped table-hover table-responsive-md">
+        <thead>
+        <tr class="center">
+            <th> ID</th>
+            <th> FACULTY NAME</th>
+            <th> EDIT</th>
+            <th> DELETE</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="faculty : ${faculties}">
+            <td class="center" th:text="${faculty.id}"></td>
+            <td class="center" th:text="${faculty.name}"></td>
+            <td class="center">
+                <button type="button" th:href="@{/{id}(id=${faculty.id})}" class="btn btn-outline-success">
+                    <img th:src="@{/images/edit.png}" width="32px" height="32px" alt="edit">
+                </button>
+            </td>
+            <td class="center">
+                <a th:href="@{/faculties/delete/{id}(id=${faculty.id})}" class="btn btn-outline-success">
+                    <img th:src="@{/images/delete.png}" width="32px" height="32px" alt="detele">
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addModalLabel">Enter faculty's fields: </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="/faculties/add" method="POST">
+                    <div class="form-group col">
+                        <input type="text" name="name" placeholder="Enter faculty's name" aria-label="Search"
+                               class="form-control">
+                    </div>
+                    <div>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal"> Close</button>
+                        <button type="submit" class="btn btn-danger"> Add faculty</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Link jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!-- Link plugin Popper -->
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+        crossorigin="anonymous"></script>
+<!-- Link Bootstrap JS -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+        crossorigin="anonymous"></script>
+</body>
+</html>
