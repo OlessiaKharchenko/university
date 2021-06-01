@@ -53,6 +53,18 @@ public class SubjectDaoImpl extends AbstractDao<Subject> implements SubjectDao {
     }
 
     @Override
+    public void removeSubjectFromGroup(Subject subject, Group group) {
+        String query = "DELETE FROM groups_subjects WHERE group_id = ? AND subject_id = ?;";
+        jdbcTemplate.update(query, subject.getId(), group.getId());
+    }
+
+    @Override
+    public void removeSubjectFromTeacher(Subject subject, Teacher teacher) {
+        String query = "DELETE FROM teachers_subjects WHERE subject_id = ? AND teacher_id = ?;";
+        jdbcTemplate.update(query, subject.getId(), teacher.getId());
+    }
+
+    @Override
     protected void fillRow(PreparedStatement statement, Subject subject) throws SQLException {
         statement.setString(1, subject.getName());
         statement.setString(2, subject.getDescription());

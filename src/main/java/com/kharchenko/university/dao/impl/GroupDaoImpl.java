@@ -55,14 +55,14 @@ public class GroupDaoImpl extends AbstractDao<Group> implements GroupDao {
     }
 
     @Override
-    public List<Group> getBySubject(Subject subject) {
-        return jdbcTemplate.queryForStream(getStatementCreatorForGetById(getQueryToGetBySubject(), subject.getId()), mapper)
-                .collect(Collectors.toList());
+    public void removeLectureFromGroup(Lecture lecture, Group group) {
+        String query = "DELETE FROM groups_lectures WHERE group_id = ? AND lecture_id = ?;";
+        jdbcTemplate.update(query, lecture.getId(), group.getId());
     }
 
     @Override
-    public List<Group> getByLecture(Lecture lecture) {
-        return jdbcTemplate.queryForStream(getStatementCreatorForGetById(getQueryToGetByLecture(), lecture.getId()), mapper)
+    public List<Group> getBySubject(Subject subject) {
+        return jdbcTemplate.queryForStream(getStatementCreatorForGetById(getQueryToGetBySubject(), subject.getId()), mapper)
                 .collect(Collectors.toList());
     }
 
@@ -114,14 +114,6 @@ public class GroupDaoImpl extends AbstractDao<Group> implements GroupDao {
                 "gs.subject_id = s.subject_id LEFT JOIN  faculties f ON g.faculty_id = f.faculty_id " +
                 "WHERE g.group_id IN (SELECT g.group_id FROM groups g LEFT JOIN groups_subjects gs ON g.group_id = gs.group_id " +
                 "LEFT JOIN subjects s ON gs.subject_id = s.subject_id WHERE s.subject_id = ?) ORDER BY g.group_id, s.subject_id;";
-    }
-
-    private String getQueryToGetByLecture() {
-        return "SELECT g.group_id, group_name, f.faculty_id, faculty_name, s.subject_id, subject_name, subject_description " +
-                "FROM groups g LEFT JOIN groups_subjects gs ON  g.group_id = gs.group_id LEFT JOIN subjects s ON " +
-                "gs.subject_id = s.subject_id LEFT JOIN  faculties f ON g.faculty_id = f.faculty_id " +
-                "WHERE g.group_id IN (SELECT g.group_id FROM groups g LEFT JOIN groups_lectures gl ON g.group_id = gl.group_id " +
-                "LEFT JOIN lectures l ON gl.lecture_id = l.lecture_id WHERE l.lecture_id = ?) ORDER BY g.group_id, s.subject_id;";
     }
 
     private String getQueryToGetByFaculty() {

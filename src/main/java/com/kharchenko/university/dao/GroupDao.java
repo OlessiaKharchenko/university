@@ -11,9 +11,9 @@ public interface GroupDao extends GenericDao<Group, Integer> {
 
     void addLectureToGroup(Lecture lecture, Group group);
 
-    List<Group> getBySubject(Subject subject);
+    void removeLectureFromGroup(Lecture lecture, Group group);
 
-    List<Group> getByLecture(Lecture lecture);
+    List<Group> getBySubject(Subject subject);
 
     List<Group> getByFaculty(Faculty faculty);
 }

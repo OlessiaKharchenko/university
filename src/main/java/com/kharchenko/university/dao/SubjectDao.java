@@ -9,4 +9,8 @@ public interface SubjectDao extends GenericDao<Subject, Integer> {
     void addTeacherToSubject(Subject subject, Teacher teacher);
 
     void addSubjectToGroup(Subject subject, Group group);
+
+    void removeSubjectFromGroup(Subject subject, Group group);
+
+    void removeSubjectFromTeacher(Subject subject, Teacher teacher);
 }

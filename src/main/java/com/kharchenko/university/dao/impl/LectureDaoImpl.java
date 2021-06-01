@@ -63,6 +63,12 @@ public class LectureDaoImpl extends AbstractDao<Lecture> implements LectureDao {
     }
 
     @Override
+    public void removeLectureFromSchedule(Lecture lecture, Schedule schedule) {
+        String query = "DELETE FROM schedules_lectures WHERE schedule_id = ? AND lecture_id = ?;";
+        jdbcTemplate.update(query, schedule.getId(), lecture.getId());
+    }
+
+    @Override
     public List<Lecture> getByClassRoom(ClassRoom classRoom) {
         return jdbcTemplate.queryForStream(getStatementCreatorForGetById(getQueryToGetByClassRoom(), classRoom.getId()), mapper)
                 .collect(Collectors.toList());

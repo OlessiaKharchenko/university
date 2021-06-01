@@ -18,6 +18,8 @@ public interface LectureService extends GenericService<Lecture, Integer> {
     void addLectureToSchedule(Lecture lecture, Schedule schedule) throws InvalidTeacherException,
             InvalidClassRoomException, InvalidGroupException;
 
+    void removeLectureFromSchedule(Lecture lecture, Schedule schedule);
+
     List<Lecture> getByClassRoom(ClassRoom classRoom) throws EntityNotFoundException;
 
     List<Lecture> getBySubject(Subject subject) throws EntityNotFoundException;

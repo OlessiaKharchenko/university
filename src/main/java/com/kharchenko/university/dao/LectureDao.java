@@ -13,6 +13,8 @@ public interface LectureDao extends GenericDao<Lecture, Integer> {
 
     void addLectureToSchedule(Lecture lecture, Schedule schedule);
 
+    void removeLectureFromSchedule(Lecture lecture, Schedule schedule);
+
     List<Lecture> getByClassRoom(ClassRoom classRoom);
 
     List<Lecture> getBySubject(Subject subject);
