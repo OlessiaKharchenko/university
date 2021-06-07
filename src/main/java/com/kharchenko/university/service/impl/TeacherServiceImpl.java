@@ -22,7 +22,7 @@ public class TeacherServiceImpl implements TeacherService {
     private LectureDao lectureDao;
 
     @Override
-    public Teacher add(Teacher teacher) throws InvalidEntityFieldException {
+    public Teacher add(Teacher teacher) {
         validateTeacherFields(teacher);
         return teacherDao.add(teacher);
     }
@@ -33,13 +33,13 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
-    public Teacher getById(Integer id) throws EntityNotFoundException {
+    public Teacher getById(Integer id) {
         return teacherDao.getById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Teacher doesn't exist with id " + id));
     }
 
     @Override
-    public void update(Teacher teacher) throws EntityNotFoundException, InvalidEntityFieldException {
+    public void update(Teacher teacher) {
         if (teacher.getId() == null) {
             throw new EntityNotFoundException("Teacher doesn't exist with id " + teacher.getId());
         }
@@ -48,7 +48,7 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
-    public boolean deleteById(Integer id) throws EntityNotFoundException, EntityHasReferenceException {
+    public boolean deleteById(Integer id) {
         Teacher teacher = getById(id);
         if (hasLectures(teacher)) {
             throw new EntityHasReferenceException("Teacher with id " + id + " has lectures.");
@@ -60,7 +60,7 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
-    public void addAll(List<Teacher> teachers) throws InvalidEntityFieldException {
+    public void addAll(List<Teacher> teachers) {
         for (Teacher teacher : teachers) {
             validateTeacherFields(teacher);
         }
@@ -72,7 +72,7 @@ public class TeacherServiceImpl implements TeacherService {
         return teacherDao.getBySubject(subject);
     }
 
-    private void validateTeacherFields(Teacher teacher) throws InvalidEntityFieldException {
+    private void validateTeacherFields(Teacher teacher) {
         if (teacher.getFirstName() == null || teacher.getFirstName().isEmpty()) {
             throw new InvalidEntityFieldException("Teacher's first name can't be empty or null");
         }

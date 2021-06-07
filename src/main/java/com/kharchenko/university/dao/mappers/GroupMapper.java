@@ -24,7 +24,9 @@ public class GroupMapper implements RowMapper<Group> {
             Integer subjectId = resultSet.getInt("subject_id");
             String subjectName = resultSet.getString("subject_name");
             String subjectDescription = resultSet.getString("subject_description");
-            subjects.add(new Subject(subjectId, subjectName, subjectDescription));
+            if (subjectId != null && subjectName != null && subjectDescription != null) {
+                subjects.add(new Subject(subjectId, subjectName, subjectDescription));
+            }
         } while (resultSet.next() && id == resultSet.getInt("group_id"));
         resultSet.previous();
         return new Group(id, name, subjects, faculty);

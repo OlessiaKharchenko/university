@@ -54,7 +54,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form action="/faculties/add" method="POST">
+                    <form th:action="@{/faculties/add}"  th:method="POST">
                     <div class="form-group col">
                         <input type="text" name="name" placeholder="Enter faculty's name" aria-label="Search"
                                class="form-control">

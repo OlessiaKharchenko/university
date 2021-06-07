@@ -4,7 +4,7 @@ import com.kharchenko.university.dao.GroupDao;
 import com.kharchenko.university.dao.LectureDao;
 import com.kharchenko.university.dao.StudentDao;
 import com.kharchenko.university.exception.EntityHasReferenceException;
-import com.kharchenko.university.exception.EntityIsAlreadyExistsException;
+import com.kharchenko.university.exception.EnitityAlreadyExistsException;
 import com.kharchenko.university.exception.EntityNotFoundException;
 import com.kharchenko.university.exception.InvalidEntityFieldException;
 import com.kharchenko.university.model.Group;
@@ -64,7 +64,7 @@ class GroupServiceImplTest {
     }
 
     @Test
-    void add_shouldReturnNewGroup_whenAddNewGroup() throws EntityIsAlreadyExistsException, InvalidEntityFieldException {
+    void add_shouldReturnNewGroup_whenAddNewGroup() {
         Faculty faculty = new Faculty(1, "Programming");
         List<Group> groups = new ArrayList<>();
         groups.add(new Group(1, "AA-111", null, faculty));
@@ -89,7 +89,7 @@ class GroupServiceImplTest {
     }
 
     @Test
-    void getById_shouldReturnCorrectGroupByGivenId() throws EntityNotFoundException {
+    void getById_shouldReturnCorrectGroupByGivenId() {
         Group expected = new Group(1, "A-11", new ArrayList<>(), new Faculty(null, "Name"));
         when(groupDao.getById(1)).thenReturn(Optional.of(expected));
         Group actual = groupService.getById(1);
@@ -126,11 +126,11 @@ class GroupServiceImplTest {
         Group group = new Group(1, "A-11", new ArrayList<>(), new Faculty(null, "Name"));
         groups.add(group);
         when(groupDao.getAll()).thenReturn(groups);
-        assertThrows(EntityIsAlreadyExistsException.class, () -> groupService.update(group));
+        assertThrows(EnitityAlreadyExistsException.class, () -> groupService.update(group));
     }
 
     @Test
-    void update_shouldCorrectlyUpdateGroup() throws EntityNotFoundException, InvalidEntityFieldException, EntityIsAlreadyExistsException {
+    void update_shouldCorrectlyUpdateGroup() {
         List<Group> groups = new ArrayList<>();
         groups.add(new Group(1, "A-11", new ArrayList<>(), new Faculty(null, "Name")));
         when(groupDao.getAll()).thenReturn(groups);
@@ -185,7 +185,7 @@ class GroupServiceImplTest {
     }
 
     @Test
-    void deleteById_shouldDeleteGroup_whenGroupHasNoReferences() throws EntityHasReferenceException, EntityNotFoundException {
+    void deleteById_shouldDeleteGroup_whenGroupHasNoReferences() {
         Faculty faculty = new Faculty(1, "Programming");
         Group group = new Group(1, "AA-111", new ArrayList<>(), faculty);
         when(groupDao.getById(1)).thenReturn(Optional.of(group));
@@ -218,7 +218,7 @@ class GroupServiceImplTest {
     }
 
     @Test
-    void addAll_shouldCorrectlyAddAllGroups() throws EntityIsAlreadyExistsException, InvalidEntityFieldException {
+    void addAll_shouldCorrectlyAddAllGroups() {
         Faculty faculty = new Faculty(1, "Programming");
         List<Group> groups = new ArrayList<>();
         groups.add(new Group(1, "AA-111", null, faculty));

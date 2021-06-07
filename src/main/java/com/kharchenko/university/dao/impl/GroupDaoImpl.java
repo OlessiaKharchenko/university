@@ -39,6 +39,7 @@ public class GroupDaoImpl extends AbstractDao<Group> implements GroupDao {
             return statement;
         }, keyHolder);
         group.setId(keyHolder.getKey().intValue());
+        addGroupSubjects(group);
         return group;
     }
 
@@ -80,7 +81,6 @@ public class GroupDaoImpl extends AbstractDao<Group> implements GroupDao {
             facultyDao.add(faculty);
         }
         statement.setInt(2, faculty.getId());
-        addGroupSubjects(group);
     }
 
     @Override
@@ -128,7 +128,7 @@ public class GroupDaoImpl extends AbstractDao<Group> implements GroupDao {
         if (subjects != null) {
             for (Subject subject : subjects) {
                 if (subject.getId() == null) {
-                    subjectDao.addAll(subjects);
+                    subjectDao.add(subject);
                 }
                 subjectDao.addSubjectToGroup(subject, group);
             }

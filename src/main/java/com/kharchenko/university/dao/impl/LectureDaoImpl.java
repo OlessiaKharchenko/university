@@ -45,6 +45,7 @@ public class LectureDaoImpl extends AbstractDao<Lecture> implements LectureDao {
             return statement;
         }, keyHolder);
         lecture.setId(keyHolder.getKey().intValue());
+        addLectureGroups(lecture);
         return lecture;
     }
 
@@ -111,7 +112,6 @@ public class LectureDaoImpl extends AbstractDao<Lecture> implements LectureDao {
             classRoomDao.add(classRoom);
         }
         statement.setInt(5, classRoom.getId());
-        addLectureGroups(lecture);
     }
 
     @Override

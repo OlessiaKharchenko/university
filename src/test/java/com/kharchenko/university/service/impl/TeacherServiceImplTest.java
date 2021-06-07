@@ -31,7 +31,6 @@ import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.times;
 
-
 @ExtendWith(MockitoExtension.class)
 class TeacherServiceImplTest {
 
@@ -41,7 +40,6 @@ class TeacherServiceImplTest {
     private LectureDao lectureDao;
     @InjectMocks
     private TeacherServiceImpl teacherService;
-
 
     @Test
     void add_shouldThrowInvalidEntityFieldException_whenTeacherFirstNameIsNull() {
@@ -68,7 +66,7 @@ class TeacherServiceImplTest {
     }
 
     @Test
-    void add_shouldReturnNewTeacher_whenAddNewTeacher() throws InvalidEntityFieldException {
+    void add_shouldReturnNewTeacher_whenAddNewTeacher() {
         Teacher teacher = new Teacher(null, "Name", "Surname", null);
         Teacher expected = new Teacher(4, "Name", "Surname", null);
         when(teacherDao.add(teacher)).thenReturn(expected);
@@ -98,7 +96,7 @@ class TeacherServiceImplTest {
     }
 
     @Test
-    void getById_shouldReturnCorrectTeacherByGivenId() throws EntityNotFoundException {
+    void getById_shouldReturnCorrectTeacherByGivenId() {
         List<Subject> subjects = new ArrayList<>();
         subjects.add(new Subject(1, "Java", "Learn Java"));
         subjects.add(new Subject(3, "Spring", "Learn Spring"));
@@ -145,7 +143,7 @@ class TeacherServiceImplTest {
     }
 
     @Test
-    void update_shouldCorrectlyUpdateTeacher() throws InvalidEntityFieldException, EntityNotFoundException {
+    void update_shouldCorrectlyUpdateTeacher() {
         Teacher teacher = new Teacher(1, "Neil", "Alishev", null);
         teacherService.update(teacher);
         verify(teacherDao, times(1)).update(teacher);
@@ -189,7 +187,7 @@ class TeacherServiceImplTest {
     }
 
     @Test
-    void deleteById_shouldDeleteTeacher_whenTeacherHasNoReferences() throws EntityHasReferenceException, EntityNotFoundException {
+    void deleteById_shouldDeleteTeacher_whenTeacherHasNoReferences() {
         Teacher teacher = new Teacher(3, "James", "Gosling", new ArrayList<>());
         when(teacherDao.getById(3)).thenReturn(Optional.of(teacher));
         when(lectureDao.getTeacherLectures(teacher)).thenReturn(new ArrayList<>());
@@ -227,7 +225,7 @@ class TeacherServiceImplTest {
     }
 
     @Test
-    void addAll_shouldCorrectlyAddAllTeachers() throws InvalidEntityFieldException {
+    void addAll_shouldCorrectlyAddAllTeachers() {
         List<Teacher> teachers = new ArrayList<>();
         teachers.add(new Teacher(null, "Name", "Surname", null));
         teacherService.addAll(teachers);

@@ -38,11 +38,15 @@ public class LectureMapper implements RowMapper<Lecture> {
         ClassRoom classRoom = new ClassRoom(classRoomId, buildingNumber, roomNumber, faculty);
         List<Group> groups = new ArrayList<>();
         do {
+            Integer groupId = resultSet.getInt("group_id");
+            String groupName = resultSet.getString("group_name");
             Group group = new Group();
-            group.setId(resultSet.getInt("group_id"));
-            group.setName(resultSet.getString("group_name"));
+            group.setId(groupId);
+            group.setName(groupName);
             group.setFaculty(faculty);
-            groups.add(group);
+            if (groupId != null && groupName != null) {
+                groups.add(group);
+            }
         } while (resultSet.next() && id == resultSet.getInt("lecture_id"));
         resultSet.previous();
         return new Lecture(id, subject, teacher, classRoom, groups, startTime, endTime);

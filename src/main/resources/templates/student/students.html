@@ -32,7 +32,7 @@
         <tr th:each="student : ${students}">
             <td class="center" th:text="${student.id}"></td>
             <td class="center" th:text="${student.firstName}"></td>
-            <td class="center"th:text="${student.lastName}"></td>
+            <td class="center" th:text="${student.lastName}"></td>
             <td class="center" th:text="${student.group.name}"></td>
             <td class="center">
                 <button type="button" th:href="@{/{id}(id=${student.id})}" class="btn btn-outline-success">
@@ -59,18 +59,22 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form action="/students/add" method="POST">
+                <form th:action="@{/students/add}"  th:method="POST">
                     <div class="form-group col">
-                        <input type="text" name="name" placeholder="Enter student's first name" aria-label="Search"
+                        <input type="text" name="firstName" placeholder="Enter student's first name" aria-label="Search"
                                class="form-control">
                     </div>
                     <div class="form-group col">
-                        <input type="text" name="name" placeholder="Enter student's last name" aria-label="Search"
+                        <input type="text" name="lastName" placeholder="Enter student's last name" aria-label="Search"
                                class="form-control">
                     </div>
                     <div class="form-group col">
-                        <input type="text" name="name" placeholder="Enter student's group" aria-label="Search"
-                               class="form-control">
+                        <label for="sel1">Choose group:</label>
+                        <select class="form-control" id="sel1" name="groupId">
+                            <option th:each="group : ${groups}" th:text="${group.id} +'. '+${group.name}"
+                                    th:value="${group.id}">
+                            </option>
+                        </select>
                     </div>
                     <div>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal"> Close</button>

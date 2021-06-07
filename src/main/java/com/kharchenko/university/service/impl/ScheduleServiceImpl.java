@@ -4,7 +4,7 @@ import com.kharchenko.university.dao.LectureDao;
 import com.kharchenko.university.dao.ScheduleDao;
 import com.kharchenko.university.dao.TeacherDao;
 import com.kharchenko.university.exception.EntityHasReferenceException;
-import com.kharchenko.university.exception.EntityIsAlreadyExistsException;
+import com.kharchenko.university.exception.EnitityAlreadyExistsException;
 import com.kharchenko.university.exception.EntityNotFoundException;
 import com.kharchenko.university.exception.InvalidEntityFieldException;
 import com.kharchenko.university.model.Group;
@@ -47,7 +47,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
-    public Schedule add(Schedule schedule) throws EntityIsAlreadyExistsException, InvalidEntityFieldException {
+    public Schedule add(Schedule schedule) {
         validateSchedule(schedule);
         return scheduleDao.add(schedule);
     }
@@ -58,7 +58,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
-    public Schedule getById(Integer id) throws EntityNotFoundException {
+    public Schedule getById(Integer id) {
         Schedule schedule = scheduleDao.getById(id)
                 .orElseThrow(() -> new EntityNotFoundException("The schedule doesn't exist with id " + id));
         setLectureFields(schedule);
@@ -66,7 +66,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
-    public void update(Schedule schedule) throws EntityIsAlreadyExistsException, EntityNotFoundException, InvalidEntityFieldException {
+    public void update(Schedule schedule) {
         if (schedule.getId() == null) {
             throw new EntityNotFoundException("The schedule doesn't exist with id " + schedule.getId());
         }
@@ -75,7 +75,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
-    public boolean deleteById(Integer id) throws EntityNotFoundException, EntityHasReferenceException {
+    public boolean deleteById(Integer id) {
         if (hasLectures(getById(id))) {
             throw new EntityHasReferenceException("Schedule with id " + id + " has lectures.");
         }
@@ -83,7 +83,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
-    public void addAll(List<Schedule> schedules) throws EntityIsAlreadyExistsException, InvalidEntityFieldException {
+    public void addAll(List<Schedule> schedules) {
         for (Schedule schedule : schedules) {
             validateSchedule(schedule);
         }
@@ -101,9 +101,11 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     private void setLectureFields(Schedule schedule) {
-        schedule.setLectures(schedule.getLectures().stream()
-                .map(lecture -> lecture = lectureDao.getById(lecture.getId()).get())
-                .collect(Collectors.toList()));
+        if (!schedule.getLectures().isEmpty()) {
+            schedule.setLectures(schedule.getLectures().stream()
+                    .map(lecture -> lecture = lectureDao.getById(lecture.getId()).get())
+                    .collect(Collectors.toList()));
+        }
     }
 
     private List<Schedule> getWithAllFields(List<Schedule> schedules) {
@@ -114,12 +116,12 @@ public class ScheduleServiceImpl implements ScheduleService {
         return !schedule.getLectures().isEmpty();
     }
 
-    private void validateSchedule(Schedule schedule) throws InvalidEntityFieldException, EntityIsAlreadyExistsException {
+    private void validateSchedule(Schedule schedule) {
         validateScheduleFields(schedule);
         checkIfUnique(schedule);
     }
 
-    private void validateScheduleFields(Schedule schedule) throws InvalidEntityFieldException {
+    private void validateScheduleFields(Schedule schedule) {
         if (schedule.getDate() == null) {
             throw new InvalidEntityFieldException("Schedule's date can't be null");
         }
@@ -134,7 +136,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         }
     }
 
-    private void validateLectures(Schedule schedule) throws InvalidEntityFieldException {
+    private void validateLectures(Schedule schedule) {
         if (schedule.getLectures().stream()
                 .noneMatch(lecture -> lecture.getClassRoom().getFaculty().equals(schedule.getFaculty()))) {
             throw new InvalidEntityFieldException("The faculty's schedule must include only faculty's classrooms");
@@ -148,10 +150,10 @@ public class ScheduleServiceImpl implements ScheduleService {
         }
     }
 
-    private void checkIfUnique(Schedule schedule) throws EntityIsAlreadyExistsException {
+    private void checkIfUnique(Schedule schedule) {
         if (scheduleDao.getAll().stream().map(Schedule::getDate)
                 .anyMatch(date -> date.isEqual(schedule.getDate()))) {
-            throw new EntityIsAlreadyExistsException("Schedule with date " + schedule.getDate().toString() + " is already exists");
+            throw new EnitityAlreadyExistsException("Schedule with date " + schedule.getDate().toString() + " is already exists");
         }
     }
 

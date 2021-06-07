@@ -5,7 +5,7 @@ import com.kharchenko.university.dao.LectureDao;
 import com.kharchenko.university.dao.SubjectDao;
 import com.kharchenko.university.dao.TeacherDao;
 import com.kharchenko.university.exception.EntityHasReferenceException;
-import com.kharchenko.university.exception.EntityIsAlreadyExistsException;
+import com.kharchenko.university.exception.EnitityAlreadyExistsException;
 import com.kharchenko.university.exception.EntityNotFoundException;
 import com.kharchenko.university.exception.InvalidEntityFieldException;
 import com.kharchenko.university.model.Group;
@@ -30,7 +30,7 @@ public class SubjectServiceImpl implements SubjectService {
     private LectureDao lectureDao;
 
     @Override
-    public Subject add(Subject subject) throws InvalidEntityFieldException, EntityIsAlreadyExistsException {
+    public Subject add(Subject subject) {
         validateSubject(subject);
         return subjectDao.add(subject);
     }
@@ -41,13 +41,13 @@ public class SubjectServiceImpl implements SubjectService {
     }
 
     @Override
-    public Subject getById(Integer id) throws EntityNotFoundException {
+    public Subject getById(Integer id) {
         return subjectDao.getById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Subject doesn't exist with id " + id));
     }
 
     @Override
-    public void update(Subject subject) throws EntityNotFoundException, InvalidEntityFieldException, EntityIsAlreadyExistsException {
+    public void update(Subject subject) {
         if (subject.getId() == null) {
             throw new EntityNotFoundException("Subject doesn't exist with id " + subject.getId());
         }
@@ -56,7 +56,7 @@ public class SubjectServiceImpl implements SubjectService {
     }
 
     @Override
-    public boolean deleteById(Integer id) throws EntityNotFoundException, EntityHasReferenceException {
+    public boolean deleteById(Integer id) {
         Subject subject = getById(id);
         if (isLearntByGroups(subject)) {
             throw new EntityHasReferenceException("Subject with id " + id + " is learnt by groups.");
@@ -71,7 +71,7 @@ public class SubjectServiceImpl implements SubjectService {
     }
 
     @Override
-    public void addAll(List<Subject> subjects) throws InvalidEntityFieldException, EntityIsAlreadyExistsException {
+    public void addAll(List<Subject> subjects) {
         for (Subject subject : subjects) {
             validateSubject(subject);
         }
@@ -98,12 +98,12 @@ public class SubjectServiceImpl implements SubjectService {
         subjectDao.removeSubjectFromTeacher(subject, teacher);
     }
 
-    private void validateSubject(Subject subject) throws InvalidEntityFieldException, EntityIsAlreadyExistsException {
+    private void validateSubject(Subject subject) {
         validateSubjectFields(subject);
         checkIfUnique(subject);
     }
 
-    private void validateSubjectFields(Subject subject) throws InvalidEntityFieldException {
+    private void validateSubjectFields(Subject subject) {
         if (subject.getName() == null || subject.getName().isEmpty()) {
             throw new InvalidEntityFieldException("Subject's name can't be empty or null");
         }
@@ -112,10 +112,10 @@ public class SubjectServiceImpl implements SubjectService {
         }
     }
 
-    private void checkIfUnique(Subject subject) throws EntityIsAlreadyExistsException {
+    private void checkIfUnique(Subject subject) {
         if (subjectDao.getAll().stream().map(Subject::getName)
                 .anyMatch(name -> name.equals(subject.getName()))) {
-            throw new EntityIsAlreadyExistsException("Subject with name " + subject.getName() + " is already exists");
+            throw new EnitityAlreadyExistsException("Subject with name " + subject.getName() + " is already exists");
         }
     }
 

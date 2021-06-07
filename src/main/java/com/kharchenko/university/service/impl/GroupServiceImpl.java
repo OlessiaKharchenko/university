@@ -4,7 +4,7 @@ import com.kharchenko.university.dao.GroupDao;
 import com.kharchenko.university.dao.LectureDao;
 import com.kharchenko.university.dao.StudentDao;
 import com.kharchenko.university.exception.EntityHasReferenceException;
-import com.kharchenko.university.exception.EntityIsAlreadyExistsException;
+import com.kharchenko.university.exception.EnitityAlreadyExistsException;
 import com.kharchenko.university.exception.EntityNotFoundException;
 import com.kharchenko.university.exception.InvalidEntityFieldException;
 import com.kharchenko.university.model.Faculty;
@@ -28,7 +28,7 @@ public class GroupServiceImpl implements GroupService {
     private LectureDao lectureDao;
 
     @Override
-    public Group add(Group group) throws InvalidEntityFieldException, EntityIsAlreadyExistsException {
+    public Group add(Group group) {
         validateGroup(group);
         return groupDao.add(group);
     }
@@ -39,12 +39,12 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public Group getById(Integer id) throws EntityNotFoundException {
+    public Group getById(Integer id) {
         return groupDao.getById(id).orElseThrow(() -> new EntityNotFoundException("Group doesn't exist with id " + id));
     }
 
     @Override
-    public void update(Group group) throws EntityNotFoundException, InvalidEntityFieldException, EntityIsAlreadyExistsException {
+    public void update(Group group) {
         if (group.getId() == null) {
             throw new EntityNotFoundException("Group doesn't exist with id " + group.getId());
         }
@@ -53,7 +53,7 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public boolean deleteById(Integer id) throws EntityNotFoundException, EntityHasReferenceException {
+    public boolean deleteById(Integer id) {
         Group group = getById(id);
         if (hasLectures(group)) {
             throw new EntityHasReferenceException("Group with id " + id + " has lectures.");
@@ -68,7 +68,7 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public void addAll(List<Group> groups) throws InvalidEntityFieldException, EntityIsAlreadyExistsException {
+    public void addAll(List<Group> groups) {
         for (Group group : groups) {
             validateGroup(group);
         }
@@ -95,12 +95,12 @@ public class GroupServiceImpl implements GroupService {
         return groupDao.getByFaculty(faculty);
     }
 
-    private void validateGroup(Group group) throws InvalidEntityFieldException, EntityIsAlreadyExistsException {
+    private void validateGroup(Group group) {
         validateGroupFields(group);
         checkIfUnique(group);
     }
 
-    private void validateGroupFields(Group group) throws InvalidEntityFieldException {
+    private void validateGroupFields(Group group) {
         if (group.getName() == null || group.getName().isEmpty()) {
             throw new InvalidEntityFieldException("Group's name can't be empty or null");
         }
@@ -109,10 +109,10 @@ public class GroupServiceImpl implements GroupService {
         }
     }
 
-    private void checkIfUnique(Group group) throws EntityIsAlreadyExistsException {
+    private void checkIfUnique(Group group) {
         if (groupDao.getAll().stream().map(Group::getName)
                 .anyMatch(name -> name.equals(group.getName()))) {
-            throw new EntityIsAlreadyExistsException("Group with name " + group.getName() + " is already exists");
+            throw new EnitityAlreadyExistsException("Group with name " + group.getName() + " is already exists");
         }
     }
 

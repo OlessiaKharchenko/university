@@ -1,11 +1,14 @@
 package com.kharchenko.university.controller;
 
-import com.kharchenko.university.exception.*;
 import com.kharchenko.university.model.Faculty;
 import com.kharchenko.university.service.FacultyService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
 @Controller
 @RequestMapping("/faculties")
@@ -18,33 +21,26 @@ public class FacultyController {
     }
 
     @GetMapping
-    public String getAllFaculties(Model model) throws EntityNotFoundException {
+    public String getAllFaculties(Model model) {
         model.addAttribute("faculties", facultyService.getAll());
         return "faculty/faculties";
     }
 
     @GetMapping("/{id}")
-    public String getFacultyById(@PathVariable int id, Model model) throws EntityNotFoundException {
+    public String getFacultyById(@PathVariable int id, Model model) {
         model.addAttribute("faculty", facultyService.getById(id));
         return "faculty/faculty";
     }
 
-
-    // ДОДАЄМО НОВИЙ
     @PostMapping("/add")
-    public String addFaculty(@ModelAttribute("classroom") Faculty faculty) throws InvalidEntityFieldException,
-            EntityNotFoundException, InvalidGroupException, EntityIsAlreadyExistsException, InvalidTeacherException {
+    public String addFaculty(@ModelAttribute("classroom") Faculty faculty) {
         facultyService.add(faculty);
         return "redirect:/faculties";
     }
 
-
-    // ВИДАЛЕННЯ
     @GetMapping("/delete/{id}")
-    public String deleteFaculty(@PathVariable(value = "id") Integer id) throws EntityHasReferenceException,
-            EntityNotFoundException {
+    public String deleteFaculty(@PathVariable(value = "id") Integer id) {
         facultyService.deleteById(id);
         return "redirect:/faculties";
     }
-
 }

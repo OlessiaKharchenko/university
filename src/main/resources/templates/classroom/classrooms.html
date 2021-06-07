@@ -13,8 +13,8 @@
 <body>
 <header th:insert="fragments/header.html :: header"></header>
 <div class="container">
-    <button type="button" class="btn btn-danger" data-toggle="modal"
-            data-target="#addModal" data-whatever="@mdo"> Add New Classroom</button>
+    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#addModal" > Add New Classroom</button>
+
     <table class="table table-striped table-hover table-responsive-md">
         <thead>
         <tr class="center">
@@ -46,7 +46,7 @@
         </tbody>
     </table>
 </div>
-<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addClassModalLabel"
      aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -57,32 +57,26 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form action="/classrooms/add" method="POST">
+                <form th:action="@{/classrooms/add}"  th:method="POST">
                     <div class="form-group col">
-                        <input type="text" name="name" placeholder="Enter building number" aria-label="Search"
+                        <input type="text" name="buildingNumber" placeholder="Enter building number" aria-label="Search"
                                class="form-control">
                     </div>
                     <div class="form-group col">
-                        <input type="text" name="description" placeholder="Enter room number"
-                               aria-label="Search"
+                        <input type="text" name="roomNumber" placeholder="Enter room number" aria-label="Search"
                                class="form-control">
                     </div>
-
                     <div class="form-group col">
-                        <label for="sel1">Choose faculty from the list:</label>
-                        <select class="form-control" id="sel1" name="sellist1">
-                            <option>1</option>
-                            <option>2</option>
-                            <option>3</option>
-                            <option>4</option>
+                        <label for="sel1">Choose faculty:</label>
+                        <select class="form-control" id="sel1" name="facultyId">
+                            <option th:each="faculty : ${faculties}"  th:text="${faculty.id} +'. '+${faculty.name}"
+                                    th:value="${faculty.id}">
+                            </option>
                         </select>
                     </div>
-
-
-
                     <div>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal"> Close</button>
-                        <button type="submit" class="btn btn-danger"> Add subject</button>
+                        <button type="submit" class="btn btn-danger"> Add classroom</button>
                     </div>
                 </form>
             </div>

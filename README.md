@@ -3,16 +3,6 @@
 
 ---
 
-[Project purpose](#project-purpose)
-
-[Project structure](#project-structure)
-
-[Launch guide](#launch-guide)
-
-[Author](#author)
-
----
-
 ## Project purpose
 
 The project includes full functionality for find and edit the timetable of students and teachers at the university.

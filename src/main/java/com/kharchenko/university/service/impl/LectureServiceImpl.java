@@ -5,7 +5,7 @@ import com.kharchenko.university.dao.LectureDao;
 import com.kharchenko.university.dao.ScheduleDao;
 import com.kharchenko.university.dao.TeacherDao;
 import com.kharchenko.university.exception.EntityHasReferenceException;
-import com.kharchenko.university.exception.EntityIsAlreadyExistsException;
+import com.kharchenko.university.exception.EnitityAlreadyExistsException;
 import com.kharchenko.university.exception.EntityNotFoundException;
 import com.kharchenko.university.exception.InvalidEntityFieldException;
 import com.kharchenko.university.exception.InvalidTeacherException;
@@ -36,19 +36,18 @@ public class LectureServiceImpl implements LectureService {
     private ScheduleDao scheduleDao;
 
     @Override
-    public Lecture add(Lecture lecture) throws EntityIsAlreadyExistsException, InvalidTeacherException, InvalidGroupException,
-            InvalidEntityFieldException, EntityNotFoundException {
+    public Lecture add(Lecture lecture) {
         validateLecture(lecture);
         return lectureDao.add(lecture);
     }
 
     @Override
-    public List<Lecture> getAll() throws EntityNotFoundException {
+    public List<Lecture> getAll() {
         return getWithAllFields(lectureDao.getAll());
     }
 
     @Override
-    public Lecture getById(Integer id) throws EntityNotFoundException {
+    public Lecture getById(Integer id) {
         Lecture lecture = lectureDao.getById(id)
                 .orElseThrow(() -> new EntityNotFoundException("The lecture doesn't exist with id " + id));
         setAbsentFields(lecture);
@@ -56,8 +55,7 @@ public class LectureServiceImpl implements LectureService {
     }
 
     @Override
-    public void update(Lecture lecture) throws EntityIsAlreadyExistsException, EntityNotFoundException,
-            InvalidTeacherException, InvalidGroupException, InvalidEntityFieldException {
+    public void update(Lecture lecture) {
         if (lecture.getId() == null) {
             throw new EntityNotFoundException("The lecture doesn't exist with id " + lecture.getId());
         }
@@ -66,7 +64,7 @@ public class LectureServiceImpl implements LectureService {
     }
 
     @Override
-    public boolean deleteById(Integer id) throws EntityNotFoundException, EntityHasReferenceException {
+    public boolean deleteById(Integer id) {
         Lecture lecture = getById(id);
         if (isUsedInSchedule(lecture)) {
             throw new EntityHasReferenceException("The lecture with id " + id + " is used in schedule.");
@@ -78,8 +76,7 @@ public class LectureServiceImpl implements LectureService {
     }
 
     @Override
-    public void addAll(List<Lecture> lectures) throws EntityIsAlreadyExistsException, InvalidTeacherException,
-            InvalidGroupException, InvalidEntityFieldException, EntityNotFoundException {
+    public void addAll(List<Lecture> lectures) {
         for (Lecture lecture : lectures) {
             validateLecture(lecture);
         }
@@ -87,8 +84,7 @@ public class LectureServiceImpl implements LectureService {
     }
 
     @Override
-    public void addLectureToSchedule(Lecture lecture, Schedule schedule) throws InvalidTeacherException,
-            InvalidClassRoomException, InvalidGroupException {
+    public void addLectureToSchedule(Lecture lecture, Schedule schedule) {
         if (!isClassRoomFree(lecture, schedule)) {
             throw new InvalidClassRoomException("The classroom has already occupied at this time.");
         }
@@ -107,26 +103,26 @@ public class LectureServiceImpl implements LectureService {
     }
 
     @Override
-    public List<Lecture> getByClassRoom(ClassRoom classRoom) throws EntityNotFoundException {
+    public List<Lecture> getByClassRoom(ClassRoom classRoom) {
         return getWithAllFields(lectureDao.getByClassRoom(classRoom));
     }
 
     @Override
-    public List<Lecture> getBySubject(Subject subject) throws EntityNotFoundException {
+    public List<Lecture> getBySubject(Subject subject) {
         return getWithAllFields(lectureDao.getBySubject(subject));
     }
 
     @Override
-    public List<Lecture> getTeacherLectures(Teacher teacher) throws EntityNotFoundException {
+    public List<Lecture> getTeacherLectures(Teacher teacher) {
         return getWithAllFields(lectureDao.getTeacherLectures(teacher));
     }
 
     @Override
-    public List<Lecture> getGroupLectures(Group group) throws EntityNotFoundException {
+    public List<Lecture> getGroupLectures(Group group) {
         return getWithAllFields(lectureDao.getGroupLectures(group));
     }
 
-    private void setAbsentFields(Lecture lecture) throws EntityNotFoundException {
+    private void setAbsentFields(Lecture lecture) {
         Teacher teacher = teacherDao.getById(lecture.getTeacher().getId())
                 .orElseThrow(() -> new EntityNotFoundException("The teacher doesn't exist with id " + lecture.getTeacher().getId()));
         lecture.getTeacher().setSubjects(teacher.getSubjects());
@@ -139,7 +135,7 @@ public class LectureServiceImpl implements LectureService {
         }
     }
 
-    private List<Lecture> getWithAllFields(List<Lecture> lectures) throws EntityNotFoundException {
+    private List<Lecture> getWithAllFields(List<Lecture> lectures) {
         for (Lecture lecture : lectures) {
             setAbsentFields(lecture);
         }
@@ -172,8 +168,7 @@ public class LectureServiceImpl implements LectureService {
         return true;
     }
 
-    private void validateLecture(Lecture lecture) throws InvalidGroupException, InvalidEntityFieldException, InvalidTeacherException,
-            EntityIsAlreadyExistsException, EntityNotFoundException {
+    private void validateLecture(Lecture lecture) {
         validateLectureFields(lecture);
         checkIfUnique(lecture);
     }
@@ -186,7 +181,7 @@ public class LectureServiceImpl implements LectureService {
         return !lecture.getGroups().isEmpty();
     }
 
-    private boolean isTeacherQualified(Teacher teacher, Subject subject) throws InvalidTeacherException {
+    private boolean isTeacherQualified(Teacher teacher, Subject subject) {
         if (teacher.getSubjects() == null) {
             throw new InvalidTeacherException("The teacher without subjects can't teach on the lecture");
         }
@@ -197,7 +192,7 @@ public class LectureServiceImpl implements LectureService {
         return group.getSubjects().contains(subject);
     }
 
-    private void validateLectureFields(Lecture lecture) throws InvalidTeacherException, InvalidGroupException, InvalidEntityFieldException {
+    private void validateLectureFields(Lecture lecture) {
         if (lecture.getSubject() == null) {
             throw new InvalidEntityFieldException("Lecture's subject can't be null");
         }
@@ -225,7 +220,7 @@ public class LectureServiceImpl implements LectureService {
         }
     }
 
-    private void checkIfUnique(Lecture lecture) throws EntityIsAlreadyExistsException, EntityNotFoundException {
+    private void checkIfUnique(Lecture lecture) {
         if (getAll().stream()
                 .anyMatch(l -> l.getSubject().equals(lecture.getSubject()) &&
                         l.getTeacher().equals(lecture.getTeacher()) &&
@@ -233,7 +228,7 @@ public class LectureServiceImpl implements LectureService {
                         l.getGroups().equals(lecture.getGroups()) &&
                         l.getStartTime().equals(lecture.getStartTime()) &&
                         l.getEndTime().equals(lecture.getEndTime()))) {
-            throw new EntityIsAlreadyExistsException("The lecture is already exists");
+            throw new EnitityAlreadyExistsException("The lecture is already exists");
         }
     }
 }

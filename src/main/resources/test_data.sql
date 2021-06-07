@@ -88,8 +88,12 @@ INSERT INTO groups_lectures (group_id, lecture_id)
 VALUES (2, 2);
 INSERT INTO groups_lectures (group_id, lecture_id)
 VALUES (3, 2);
+INSERT INTO groups_lectures (group_id, lecture_id)
+VALUES (3, 3);
 
 INSERT INTO schedules_lectures (schedule_id, lecture_id)
 VALUES (1, 1);
 INSERT INTO schedules_lectures (schedule_id, lecture_id)
 VALUES (1, 2);
+INSERT INTO schedules_lectures (schedule_id, lecture_id)
+VALUES (2, 1);

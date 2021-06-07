@@ -38,6 +38,7 @@ public class ScheduleDaoImpl extends AbstractDao<Schedule> implements ScheduleDa
             return statement;
         }, keyHolder);
         schedule.setId(keyHolder.getKey().intValue());
+        addScheduleLectures(schedule);
         return schedule;
     }
 
@@ -67,7 +68,6 @@ public class ScheduleDaoImpl extends AbstractDao<Schedule> implements ScheduleDa
             facultyDao.add(faculty);
         }
         statement.setInt(2, faculty.getId());
-        addScheduleLectures(schedule);
     }
 
     @Override
