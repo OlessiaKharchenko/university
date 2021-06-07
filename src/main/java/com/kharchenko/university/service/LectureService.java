@@ -1,9 +1,5 @@
 package com.kharchenko.university.service;
 
-import com.kharchenko.university.exception.EntityNotFoundException;
-import com.kharchenko.university.exception.InvalidClassRoomException;
-import com.kharchenko.university.exception.InvalidGroupException;
-import com.kharchenko.university.exception.InvalidTeacherException;
 import com.kharchenko.university.model.Schedule;
 import com.kharchenko.university.model.ClassRoom;
 import com.kharchenko.university.model.Lecture;
@@ -15,16 +11,15 @@ import java.util.List;
 
 public interface LectureService extends GenericService<Lecture, Integer> {
 
-    void addLectureToSchedule(Lecture lecture, Schedule schedule) throws InvalidTeacherException,
-            InvalidClassRoomException, InvalidGroupException;
+    void addLectureToSchedule(Lecture lecture, Schedule schedule);
 
     void removeLectureFromSchedule(Lecture lecture, Schedule schedule);
 
-    List<Lecture> getByClassRoom(ClassRoom classRoom) throws EntityNotFoundException;
+    List<Lecture> getByClassRoom(ClassRoom classRoom);
 
-    List<Lecture> getBySubject(Subject subject) throws EntityNotFoundException;
+    List<Lecture> getBySubject(Subject subject);
 
-    List<Lecture> getTeacherLectures(Teacher teacher) throws EntityNotFoundException;
+    List<Lecture> getTeacherLectures(Teacher teacher);
 
-    List<Lecture> getGroupLectures(Group group) throws EntityNotFoundException;
+    List<Lecture> getGroupLectures(Group group);
 }

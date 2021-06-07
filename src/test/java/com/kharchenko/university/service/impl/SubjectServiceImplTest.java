@@ -5,7 +5,7 @@ import com.kharchenko.university.dao.LectureDao;
 import com.kharchenko.university.dao.SubjectDao;
 import com.kharchenko.university.dao.TeacherDao;
 import com.kharchenko.university.exception.EntityHasReferenceException;
-import com.kharchenko.university.exception.EntityIsAlreadyExistsException;
+import com.kharchenko.university.exception.EnitityAlreadyExistsException;
 import com.kharchenko.university.exception.EntityNotFoundException;
 import com.kharchenko.university.exception.InvalidEntityFieldException;
 import com.kharchenko.university.model.Group;
@@ -83,11 +83,11 @@ class SubjectServiceImplTest {
         subjects.add(new Subject(5, "Junit", "Learn Junit"));
         when(subjectDao.getAll()).thenReturn(subjects);
         Subject subject = new Subject(null, "Java", "Learn Java");
-        assertThrows(EntityIsAlreadyExistsException.class, () -> subjectService.add(subject));
+        assertThrows(EnitityAlreadyExistsException.class, () -> subjectService.add(subject));
     }
 
     @Test
-    void add_shouldReturnNewSubject_whenAddNewSubject() throws EntityIsAlreadyExistsException, InvalidEntityFieldException {
+    void add_shouldReturnNewSubject_whenAddNewSubject() {
         List<Subject> subjects = new ArrayList<>();
         subjects.add(new Subject(1, "Java", "Learn Java"));
         subjects.add(new Subject(2, "Sql", "Learn Sql"));
@@ -117,7 +117,7 @@ class SubjectServiceImplTest {
     }
 
     @Test
-    void getById_shouldReturnCorrectSubjectByGivenId() throws EntityNotFoundException {
+    void getById_shouldReturnCorrectSubjectByGivenId() {
         Subject expected = new Subject(1, "Java", "Learn Java");
         when(subjectDao.getById(1)).thenReturn(Optional.of(expected));
         Subject actual = subjectService.getById(1);
@@ -167,11 +167,11 @@ class SubjectServiceImplTest {
         expected.add(new Subject(2, "Sql", "Learn Sql"));
         when(subjectDao.getAll()).thenReturn(expected);
         Subject subject = new Subject(1, "Java", "Learn Java8");
-        assertThrows(EntityIsAlreadyExistsException.class, () -> subjectService.update(subject));
+        assertThrows(EnitityAlreadyExistsException.class, () -> subjectService.update(subject));
     }
 
     @Test
-    void update_shouldCorrectlyUpdateSubject() throws EntityNotFoundException, InvalidEntityFieldException, EntityIsAlreadyExistsException {
+    void update_shouldCorrectlyUpdateSubject() {
         List<Subject> expected = new ArrayList<>();
         expected.add(new Subject(1, "Java", "Learn Java"));
         expected.add(new Subject(2, "Sql", "Learn Sql"));
@@ -233,7 +233,7 @@ class SubjectServiceImplTest {
     }
 
     @Test
-    void deleteById_shouldDeleteSubject_whenSubjectHasNoReferences() throws EntityHasReferenceException, EntityNotFoundException {
+    void deleteById_shouldDeleteSubject_whenSubjectHasNoReferences() {
         Subject subject = new Subject(5, "Junit", "Learn Junit");
         when(subjectDao.getById(5)).thenReturn(Optional.of(subject));
         when(groupDao.getBySubject(subject)).thenReturn(new ArrayList<>());
@@ -282,11 +282,11 @@ class SubjectServiceImplTest {
         expected.add(new Subject(5, "Junit", "Learn Junit"));
         when(subjectDao.getAll()).thenReturn(expected);
         List<Subject> subjectsForAddAll = Arrays.asList(new Subject(null, "Java", "Learn Java"));
-        assertThrows(EntityIsAlreadyExistsException.class, () -> subjectService.addAll(subjectsForAddAll));
+        assertThrows(EnitityAlreadyExistsException.class, () -> subjectService.addAll(subjectsForAddAll));
     }
 
     @Test
-    void addAll_shouldCorrectlyAddAllSubjects() throws EntityIsAlreadyExistsException, InvalidEntityFieldException {
+    void addAll_shouldCorrectlyAddAllSubjects() {
         List<Subject> expected = new ArrayList<>();
         expected.add(new Subject(1, "Java", "Learn Java"));
         expected.add(new Subject(2, "Sql", "Learn Sql"));

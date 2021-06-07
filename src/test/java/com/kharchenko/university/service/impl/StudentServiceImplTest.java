@@ -73,7 +73,7 @@ class StudentServiceImplTest {
     }
 
     @Test
-    void add_shouldReturnNewStudent_whenAddNewStudent() throws InvalidEntityFieldException {
+    void add_shouldReturnNewStudent_whenAddNewStudent() {
         Faculty faculty = new Faculty(1, "Programming");
         Group group = new Group(1, "AA-111", new ArrayList<>(), faculty);
         Student student = new Student(null, "Ivan", "Ivanov", group);
@@ -99,7 +99,7 @@ class StudentServiceImplTest {
     }
 
     @Test
-    void getById_shouldReturnCorrectStudentByGivenId() throws EntityNotFoundException {
+    void getById_shouldReturnCorrectStudentByGivenId() {
         Faculty faculty = new Faculty(1, "Programming");
         List<Subject> subjects = new ArrayList<>();
         subjects.add(new Subject(1, "Java", "Learn Java"));
@@ -163,7 +163,7 @@ class StudentServiceImplTest {
     }
 
     @Test
-    void update_shouldCorrectlyUpdateStudent() throws InvalidEntityFieldException, EntityNotFoundException {
+    void update_shouldCorrectlyUpdateStudent() {
         Faculty faculty = new Faculty(1, "Programming");
         Group group = new Group(1, "AA-111", new ArrayList<>(), faculty);
         Student student = new Student(1, "Ivan", "Ivanov", group);
@@ -178,7 +178,7 @@ class StudentServiceImplTest {
     }
 
     @Test
-    void deleteById_shouldDeleteStudent_whenStudentExist() throws EntityNotFoundException {
+    void deleteById_shouldDeleteStudent_whenStudentExist() {
         Faculty faculty = new Faculty(1, "Programming");
         Group group = new Group(1, "AA-111", new ArrayList<>(), faculty);
         Student student = new Student(1, "Ivan", "ivanov", group);
@@ -227,7 +227,7 @@ class StudentServiceImplTest {
     }
 
     @Test
-    void addAll_shouldCorrectlyAddAllStudents() throws InvalidEntityFieldException {
+    void addAll_shouldCorrectlyAddAllStudents() {
         Faculty faculty = new Faculty(1, "Programming");
         Group group = new Group(1, "AA-111", new ArrayList<>(), faculty);
         List<Student> students = Arrays.asList(new Student(null, "Ivan", "Ivanov", group));

@@ -5,7 +5,7 @@ import com.kharchenko.university.dao.FacultyDao;
 import com.kharchenko.university.dao.GroupDao;
 import com.kharchenko.university.dao.ScheduleDao;
 import com.kharchenko.university.exception.EntityHasReferenceException;
-import com.kharchenko.university.exception.EntityIsAlreadyExistsException;
+import com.kharchenko.university.exception.EnitityAlreadyExistsException;
 import com.kharchenko.university.exception.EntityNotFoundException;
 import com.kharchenko.university.exception.InvalidEntityFieldException;
 import com.kharchenko.university.model.Group;
@@ -61,7 +61,7 @@ class FacultyServiceImplTest {
     }
 
     @Test
-    void add_shouldReturnNewFaculty_whenAddNewFaculty() throws EntityIsAlreadyExistsException, InvalidEntityFieldException {
+    void add_shouldReturnNewFaculty_whenAddNewFaculty() {
         List<Faculty> faculties = new ArrayList<>();
         faculties.add(new Faculty(1, "Programming"));
         faculties.add(new Faculty(2, "Management"));
@@ -85,7 +85,7 @@ class FacultyServiceImplTest {
     }
 
     @Test
-    void getById_shouldReturnCorrectFacultyByGivenId() throws EntityNotFoundException {
+    void getById_shouldReturnCorrectFacultyByGivenId() {
         Faculty expected = new Faculty(1, "Programming");
         when(facultyDao.getById(1)).thenReturn(Optional.of(expected));
         Faculty actual = facultyService.getById(1);
@@ -123,11 +123,11 @@ class FacultyServiceImplTest {
         List<Faculty> faculties = Arrays.asList(firstFaculty, secondFaculty);
         when(facultyDao.getAll()).thenReturn(faculties);
         Faculty faculty = new Faculty(1, "Programming");
-        assertThrows(EntityIsAlreadyExistsException.class, () -> facultyService.update(faculty));
+        assertThrows(EnitityAlreadyExistsException.class, () -> facultyService.update(faculty));
     }
 
     @Test
-    void update_shouldCorrectlyUpdateFaculty() throws EntityIsAlreadyExistsException, EntityNotFoundException, InvalidEntityFieldException {
+    void update_shouldCorrectlyUpdateFaculty() {
         Faculty firstFaculty = new Faculty(1, "Programming");
         Faculty secondFaculty = new Faculty(2, "Management");
         List<Faculty> faculties = Arrays.asList(firstFaculty, secondFaculty);
@@ -181,7 +181,7 @@ class FacultyServiceImplTest {
     }
 
     @Test
-    void deleteById_shouldDeleteFaculty_whenFacultyHasNoReferences() throws EntityHasReferenceException, EntityNotFoundException {
+    void deleteById_shouldDeleteFaculty_whenFacultyHasNoReferences() {
         Faculty faculty = new Faculty(2, "Management");
         when(facultyDao.getById(2)).thenReturn(Optional.of(faculty));
         when(classRoomDao.getByFaculty(faculty)).thenReturn(new ArrayList<>());
@@ -213,11 +213,11 @@ class FacultyServiceImplTest {
         expected.add(new Faculty(2, "Management"));
         when(facultyDao.getAll()).thenReturn(expected);
         List<Faculty> facultiesForAddAll = Arrays.asList(new Faculty(null, "Programming"));
-        assertThrows(EntityIsAlreadyExistsException.class, () -> facultyService.addAll(facultiesForAddAll));
+        assertThrows(EnitityAlreadyExistsException.class, () -> facultyService.addAll(facultiesForAddAll));
     }
 
     @Test
-    void addAll_shouldCorrectlyAddAllSubjects() throws EntityIsAlreadyExistsException, InvalidEntityFieldException {
+    void addAll_shouldCorrectlyAddAllSubjects() {
         List<Faculty> expected = new ArrayList<>();
         expected.add(new Faculty(1, "Programming"));
         expected.add(new Faculty(2, "Management"));

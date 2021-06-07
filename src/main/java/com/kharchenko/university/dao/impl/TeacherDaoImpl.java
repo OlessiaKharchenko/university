@@ -35,6 +35,7 @@ public class TeacherDaoImpl extends AbstractDao<Teacher> implements TeacherDao {
             return statement;
         }, keyHolder);
         teacher.setId(keyHolder.getKey().intValue());
+        addTeacherSubjects(teacher);
         return teacher;
     }
 
@@ -54,7 +55,6 @@ public class TeacherDaoImpl extends AbstractDao<Teacher> implements TeacherDao {
     protected void fillRow(PreparedStatement statement, Teacher teacher) throws SQLException {
         statement.setString(1, teacher.getFirstName());
         statement.setString(2, teacher.getLastName());
-        addTeacherSubjects(teacher);
     }
 
     @Override

@@ -18,6 +18,7 @@ import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import org.springframework.test.jdbc.JdbcTestUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -68,10 +69,10 @@ class ClassRoomDaoImplTest {
     @Test
     void getAll_shouldReturnAllClassRooms() {
         Faculty faculty = new Faculty(1, "Programming");
-        List<ClassRoom> expected = new ArrayList<>();
-        expected.add(new ClassRoom(1, 1, 100, faculty));
-        expected.add(new ClassRoom(2, 2, 200, faculty));
-        expected.add(new ClassRoom(3, 3, 300, faculty));
+        ClassRoom firstClassRoom = new ClassRoom(1, 1, 100, faculty);
+        ClassRoom secondClassRoom = new ClassRoom(2, 2, 200, faculty);
+        ClassRoom thirdClassRoom = new ClassRoom(3, 3, 300, faculty);
+        List<ClassRoom> expected = Arrays.asList(firstClassRoom, secondClassRoom, thirdClassRoom);
         List<ClassRoom> actual = classroomDao.getAll();
         assertEquals(expected, actual);
     }
@@ -127,10 +128,10 @@ class ClassRoomDaoImplTest {
     @Test
     void getByFaculty_shouldReturnAllClassRoomsByGivenFaculty() {
         Faculty faculty = new Faculty(1, "Programming");
-        List<ClassRoom> expected = new ArrayList<>();
-        expected.add(new ClassRoom(1, 1, 100, faculty));
-        expected.add(new ClassRoom(2, 2, 200, faculty));
-        expected.add(new ClassRoom(3, 3, 300, faculty));
+        ClassRoom firstClassRoom = new ClassRoom(1, 1, 100, faculty);
+        ClassRoom secondClassRoom = new ClassRoom(2, 2, 200, faculty);
+        ClassRoom thirdClassRoom = new ClassRoom(3, 3, 300, faculty);
+        List<ClassRoom> expected = Arrays.asList(firstClassRoom, secondClassRoom, thirdClassRoom);
         List<ClassRoom> actual = classroomDao.getByFaculty(faculty);
         assertEquals(expected, actual);
     }

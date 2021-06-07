@@ -3,7 +3,7 @@ package com.kharchenko.university.service.impl;
 import com.kharchenko.university.dao.ClassRoomDao;
 import com.kharchenko.university.dao.LectureDao;
 import com.kharchenko.university.exception.EntityHasReferenceException;
-import com.kharchenko.university.exception.EntityIsAlreadyExistsException;
+import com.kharchenko.university.exception.EnitityAlreadyExistsException;
 import com.kharchenko.university.exception.EntityNotFoundException;
 import com.kharchenko.university.exception.InvalidEntityFieldException;
 import com.kharchenko.university.model.Group;
@@ -56,11 +56,11 @@ class ClassRoomServiceImplTest {
         classRooms.add(new ClassRoom(1, 1, 100, new Faculty(1, "Programming")));
         when(classRoomDao.getByBuildingNumber(1)).thenReturn(classRooms);
         ClassRoom classRoom = new ClassRoom(null, 1, 100, new Faculty(null, "Name"));
-        assertThrows(EntityIsAlreadyExistsException.class, () -> classRoomService.add(classRoom));
+        assertThrows(EnitityAlreadyExistsException.class, () -> classRoomService.add(classRoom));
     }
 
     @Test
-    void add_shouldReturnNewClassRoom_whenAddNewClassRoom() throws EntityIsAlreadyExistsException, InvalidEntityFieldException {
+    void add_shouldReturnNewClassRoom_whenAddNewClassRoom() {
         List<ClassRoom> classRooms = new ArrayList<>();
         classRooms.add(new ClassRoom(1, 1, 100, new Faculty(1, "Programming")));
         when(classRoomDao.getByBuildingNumber(1)).thenReturn(classRooms);
@@ -84,7 +84,7 @@ class ClassRoomServiceImplTest {
     }
 
     @Test
-    void getById_shouldReturnCorrectClassRoomByGivenId() throws EntityNotFoundException {
+    void getById_shouldReturnCorrectClassRoomByGivenId() {
         ClassRoom expected = new ClassRoom(1, 1, 100, new Faculty(1, "Programming"));
         when(classRoomDao.getById(1)).thenReturn(Optional.of(expected));
         ClassRoom actual = classRoomService.getById(1);
@@ -115,11 +115,11 @@ class ClassRoomServiceImplTest {
         ClassRoom classRoom = new ClassRoom(1, 1, 100, new Faculty(1, "Programming"));
         classRooms.add(classRoom);
         when(classRoomDao.getByBuildingNumber(1)).thenReturn(classRooms);
-        assertThrows(EntityIsAlreadyExistsException.class, () -> classRoomService.update(classRoom));
+        assertThrows(EnitityAlreadyExistsException.class, () -> classRoomService.update(classRoom));
     }
 
     @Test
-    void update_shouldCorrectlyUpdateClassRoom() throws EntityIsAlreadyExistsException, EntityNotFoundException, InvalidEntityFieldException {
+    void update_shouldCorrectlyUpdateClassRoom() {
         List<ClassRoom> classRooms = new ArrayList<>();
         classRooms.add(new ClassRoom(1, 1, 100, new Faculty(1, "Programming")));
         when(classRoomDao.getByBuildingNumber(1)).thenReturn(classRooms);
@@ -153,7 +153,7 @@ class ClassRoomServiceImplTest {
     }
 
     @Test
-    void deleteById_shouldDeleteClassroom_whenClassRoomHasNoLectures() throws EntityHasReferenceException, EntityNotFoundException {
+    void deleteById_shouldDeleteClassroom_whenClassRoomHasNoLectures() {
         ClassRoom classRoom = new ClassRoom(3, 3, 300, new Faculty(1, "Programming"));
         when(classRoomDao.getById(3)).thenReturn(Optional.of(classRoom));
         when(lectureDao.getByClassRoom(classRoom)).thenReturn(new ArrayList<>());
@@ -163,7 +163,7 @@ class ClassRoomServiceImplTest {
     }
 
     @Test
-    void addAll_shouldCorrectlyAddAllClassRooms() throws EntityIsAlreadyExistsException, InvalidEntityFieldException {
+    void addAll_shouldCorrectlyAddAllClassRooms() {
         List<ClassRoom> classRooms = new ArrayList<>();
         classRooms.add(new ClassRoom(1, 1, 100, new Faculty(1, "Programming")));
         when(classRoomDao.getByBuildingNumber(1)).thenReturn(classRooms);
@@ -181,7 +181,7 @@ class ClassRoomServiceImplTest {
         when(classRoomDao.getByBuildingNumber(1)).thenReturn(classRooms);
         List<ClassRoom> classRoomsForAddAll = new ArrayList<>();
         classRoomsForAddAll.add(new ClassRoom(null, 1, 100, new Faculty(null, "Name")));
-        assertThrows(EntityIsAlreadyExistsException.class, () -> classRoomService.addAll(classRoomsForAddAll));
+        assertThrows(EnitityAlreadyExistsException.class, () -> classRoomService.addAll(classRoomsForAddAll));
     }
 
     @Test

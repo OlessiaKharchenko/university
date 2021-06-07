@@ -5,7 +5,7 @@ import com.kharchenko.university.dao.LectureDao;
 import com.kharchenko.university.dao.ScheduleDao;
 import com.kharchenko.university.dao.TeacherDao;
 import com.kharchenko.university.exception.EntityHasReferenceException;
-import com.kharchenko.university.exception.EntityIsAlreadyExistsException;
+import com.kharchenko.university.exception.EnitityAlreadyExistsException;
 import com.kharchenko.university.exception.EntityNotFoundException;
 import com.kharchenko.university.exception.InvalidEntityFieldException;
 import com.kharchenko.university.exception.InvalidTeacherException;
@@ -131,12 +131,11 @@ class LectureServiceImplTest {
         when(teacherDao.getById(1)).thenReturn(Optional.of(lectureWithId.getTeacher()));
         when(groupDao.getById(1)).thenReturn(Optional.of(lectureWithId.getGroups().get(0)));
         when(lectureDao.getAll()).thenReturn(Arrays.asList(lectureWithId));
-        assertThrows(EntityIsAlreadyExistsException.class, () -> lectureService.add(lectureToAdd));
+        assertThrows(EnitityAlreadyExistsException.class, () -> lectureService.add(lectureToAdd));
     }
 
     @Test
-    void add_shouldReturnNewLecture_whenAddNewLecture() throws EntityIsAlreadyExistsException, InvalidEntityFieldException,
-            InvalidGroupException, EntityNotFoundException, InvalidTeacherException {
+    void add_shouldReturnNewLecture_whenAddNewLecture() {
         Lecture lectureWithId = getLectures().get(2);
         Lecture lectureToAdd = getLectures().get(3);
         when(teacherDao.getById(1)).thenReturn(Optional.of(lectureWithId.getTeacher()));
@@ -148,7 +147,7 @@ class LectureServiceImplTest {
     }
 
     @Test
-    void getAll_shouldReturnAllLecturesWithAllNestedEntities() throws EntityNotFoundException {
+    void getAll_shouldReturnAllLecturesWithAllNestedEntities() {
         Faculty faculty = new Faculty(1, "Programming");
         Subject firstSubject = new Subject(1, "Java", "Learn Java");
         Subject secondSubject = new Subject(3, "Spring", "Learn Spring");
@@ -165,7 +164,7 @@ class LectureServiceImplTest {
     }
 
     @Test
-    void getById_shouldReturnCorrectLectureByGivenId() throws EntityNotFoundException {
+    void getById_shouldReturnCorrectLectureByGivenId() {
         Lecture expected = getLectures().get(0);
         when(lectureDao.getById(1)).thenReturn(Optional.of(expected));
         when(teacherDao.getById(1)).thenReturn(Optional.of(expected.getTeacher()));
@@ -264,11 +263,11 @@ class LectureServiceImplTest {
         when(teacherDao.getById(1)).thenReturn(Optional.of(lecture.getTeacher()));
         when(groupDao.getById(1)).thenReturn(Optional.of(lecture.getGroups().get(0)));
         when(lectureDao.getAll()).thenReturn(Arrays.asList(lecture));
-        assertThrows(EntityIsAlreadyExistsException.class, () -> lectureService.update(lecture));
+        assertThrows(EnitityAlreadyExistsException.class, () -> lectureService.update(lecture));
     }
 
     @Test
-    void update_shouldCorrectlyUpdateLecture() throws InvalidEntityFieldException, InvalidTeacherException, InvalidGroupException, EntityIsAlreadyExistsException, EntityNotFoundException {
+    void update_shouldCorrectlyUpdateLecture() {
         Lecture lecture = getLectures().get(0);
         Lecture lectureToUpdate = getLectures().get(2);
         when(teacherDao.getById(1)).thenReturn(Optional.of(lecture.getTeacher()));
@@ -309,7 +308,7 @@ class LectureServiceImplTest {
     }
 
     @Test
-    void deleteById_shouldDeleteLecture_whenLectureHasNoReferences() throws EntityHasReferenceException, EntityNotFoundException {
+    void deleteById_shouldDeleteLecture_whenLectureHasNoReferences() {
         Lecture lecture = getLectures().get(5);
         when(lectureDao.getById(1)).thenReturn(Optional.of(lecture));
         when(scheduleDao.getByLecture(lecture)).thenReturn(new ArrayList<>());
@@ -398,12 +397,11 @@ class LectureServiceImplTest {
         when(teacherDao.getById(1)).thenReturn(Optional.of(lectureWithId.getTeacher()));
         when(groupDao.getById(1)).thenReturn(Optional.of(lectureWithId.getGroups().get(0)));
         when(lectureDao.getAll()).thenReturn(Arrays.asList(lectureWithId));
-        assertThrows(EntityIsAlreadyExistsException.class, () -> lectureService.addAll(lecturesToAdd));
+        assertThrows(EnitityAlreadyExistsException.class, () -> lectureService.addAll(lecturesToAdd));
     }
 
     @Test
-    void addAll_shouldCorrectlyAddAllLectures() throws InvalidEntityFieldException, EntityNotFoundException,
-            InvalidGroupException, EntityIsAlreadyExistsException, InvalidTeacherException {
+    void addAll_shouldCorrectlyAddAllLectures() {
         Lecture lectureWithId = getLectures().get(2);
         List<Lecture> lecturesToAddAll = Arrays.asList(getLectures().get(3));
         when(teacherDao.getById(1)).thenReturn(Optional.of(lectureWithId.getTeacher()));
@@ -414,8 +412,7 @@ class LectureServiceImplTest {
     }
 
     @Test
-    void addLectureToSchedule_shouldCorrectlyaddLectureToSchedule() throws InvalidClassRoomException, InvalidGroupException,
-            InvalidTeacherException {
+    void addLectureToSchedule_shouldCorrectlyaddLectureToSchedule() {
         Faculty faculty = new Faculty(1, "Programming");
         LocalDate date = LocalDate.of(2021, 9, 1);
         Lecture lecture = getLectures().get(7);
@@ -462,7 +459,7 @@ class LectureServiceImplTest {
     }
 
     @Test
-    void getByClassRoom_shouldReturnAllLecturesByGivenClassRoom() throws EntityNotFoundException {
+    void getByClassRoom_shouldReturnAllLecturesByGivenClassRoom() {
         List<Lecture> expected = Arrays.asList(getLectures().get(0));
         ClassRoom classRoom = getLectures().get(0).getClassRoom();
         when(teacherDao.getById(1)).thenReturn(Optional.of(getLectures().get(0).getTeacher()));
@@ -473,7 +470,7 @@ class LectureServiceImplTest {
     }
 
     @Test
-    void getBySubject_shouldReturnAllLecturesByGivenSubject() throws EntityNotFoundException {
+    void getBySubject_shouldReturnAllLecturesByGivenSubject() {
         List<Lecture> expected = Arrays.asList(getLectures().get(0));
         Subject subject = getLectures().get(0).getSubject();
         when(teacherDao.getById(1)).thenReturn(Optional.of(getLectures().get(0).getTeacher()));
@@ -484,7 +481,7 @@ class LectureServiceImplTest {
     }
 
     @Test
-    void getTeacherLectures_shouldReturnAllLecturesByGivenTeacher() throws EntityNotFoundException {
+    void getTeacherLectures_shouldReturnAllLecturesByGivenTeacher() {
         List<Lecture> expected = Arrays.asList(getLectures().get(0));
         Teacher teacher = getLectures().get(0).getTeacher();
         when(teacherDao.getById(1)).thenReturn(Optional.of(getLectures().get(0).getTeacher()));
@@ -495,7 +492,7 @@ class LectureServiceImplTest {
     }
 
     @Test
-    void getGroupLectures_shouldReturnAllLecturesByGivenGroup() throws EntityNotFoundException {
+    void getGroupLectures_shouldReturnAllLecturesByGivenGroup() {
         List<Lecture> expected = Arrays.asList(getLectures().get(0));
         Group group = getLectures().get(0).getGroups().get(0);
         when(teacherDao.getById(1)).thenReturn(Optional.of(getLectures().get(0).getTeacher()));

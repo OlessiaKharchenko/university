@@ -18,7 +18,7 @@ public class StudentServiceImpl implements StudentService {
     private StudentDao studentDao;
 
     @Override
-    public Student add(Student student) throws InvalidEntityFieldException {
+    public Student add(Student student) {
         validateStudentFields(student);
         return studentDao.add(student);
     }
@@ -29,12 +29,12 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public Student getById(Integer id) throws EntityNotFoundException {
+    public Student getById(Integer id) {
         return studentDao.getById(id).orElseThrow(() -> new EntityNotFoundException("Student doesn't exist with id " + id));
     }
 
     @Override
-    public void update(Student student) throws EntityNotFoundException, InvalidEntityFieldException {
+    public void update(Student student) {
         if (student.getId() == null) {
             throw new EntityNotFoundException("Student doesn't exist with id " + student.getId());
         }
@@ -43,13 +43,13 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public boolean deleteById(Integer id) throws EntityNotFoundException {
+    public boolean deleteById(Integer id) {
         Student student = getById(id);
         return studentDao.deleteById(student.getId());
     }
 
     @Override
-    public void addAll(List<Student> students) throws InvalidEntityFieldException {
+    public void addAll(List<Student> students) {
         for (Student student : students) {
             validateStudentFields(student);
         }
@@ -61,7 +61,7 @@ public class StudentServiceImpl implements StudentService {
         return studentDao.getGroupStudents(group);
     }
 
-    private void validateStudentFields(Student student) throws InvalidEntityFieldException {
+    private void validateStudentFields(Student student) {
         if (student.getFirstName() == null || student.getFirstName().isEmpty()) {
             throw new InvalidEntityFieldException("Student's first name can't be empty or null");
         }

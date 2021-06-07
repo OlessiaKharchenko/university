@@ -19,9 +19,11 @@ public class TeacherMapper implements RowMapper<Teacher> {
         List<Subject> subjects = new ArrayList<>();
         do {
             Integer subjectId = resultSet.getInt("subject_id");
-            String name = resultSet.getString("subject_name");
-            String description = resultSet.getString("subject_description");
-            subjects.add(new Subject(subjectId, name, description));
+            String subjectName = resultSet.getString("subject_name");
+            String subjectDescription = resultSet.getString("subject_description");
+            if (subjectId != null && subjectName != null && subjectDescription != null) {
+                subjects.add(new Subject(subjectId, subjectName, subjectDescription));
+            }
         } while (resultSet.next() && id == resultSet.getInt("teacher_id"));
         resultSet.previous();
         return new Teacher(id, firstName, lastName, subjects);

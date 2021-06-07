@@ -39,7 +39,7 @@
             </td>
             <td class="center">
                 <a class="btn btn-outline-success">
-                    <img th:src="@{/images/add_subject.png}" width="32px" height="32px" alt="add">
+                    <img th:src="@{/images/add_icon.png}" width="32px" height="32px" alt="add">
                 </a>
             </td>
             <td class="center">
@@ -67,18 +67,27 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form action="/groups/add" method="POST">
+                <form th:action="@{/groups/add}" th:method="POST">
                     <div class="form-group col">
                         <input type="text" name="name" placeholder="Enter group's name" aria-label="Search"
                                class="form-control">
                     </div>
                     <div class="form-group col">
-                        <input type="text" name="name" placeholder="Choose group's faculty" aria-label="Search"
-                               class="form-control">
+                        <label for="sel1">Choose faculty:</label>
+                        <select class="form-control" id="sel1" name="facultyId">
+                            <option th:each="faculty : ${faculties}" th:text="${faculty.id} +'. '+${faculty.name}"
+                                    th:value="${faculty.id}">
+                            </option>
+                        </select>
                     </div>
                     <div class="form-group col">
-                        <input type="text" name="name" placeholder="Choose group's subjects" aria-label="Search"
-                               class="form-control">
+                        <label class="col-form-label">Choose group's subjects:</label>
+                        <div th:each="subject : ${subjects}">
+                            <label>
+                                <input type="checkbox" th:value="${subject.id}" name="groupSubjects"/>
+                                <span th:text="${subject.name}" th:remove="tag"> </span>
+                            </label>
+                        </div>
                     </div>
                     <div>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal"> Close</button>

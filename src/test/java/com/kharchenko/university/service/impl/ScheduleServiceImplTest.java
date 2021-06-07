@@ -4,7 +4,7 @@ import com.kharchenko.university.dao.LectureDao;
 import com.kharchenko.university.dao.ScheduleDao;
 import com.kharchenko.university.dao.TeacherDao;
 import com.kharchenko.university.exception.EntityHasReferenceException;
-import com.kharchenko.university.exception.EntityIsAlreadyExistsException;
+import com.kharchenko.university.exception.EnitityAlreadyExistsException;
 import com.kharchenko.university.exception.EntityNotFoundException;
 import com.kharchenko.university.exception.InvalidEntityFieldException;
 import com.kharchenko.university.model.Group;
@@ -107,11 +107,11 @@ class ScheduleServiceImplTest {
         Faculty faculty = new Faculty(1, "Programming");
         LocalDate date = LocalDate.of(2021, 9, 1);
         Schedule schedule = new Schedule(null, null, date, faculty);
-        assertThrows(EntityIsAlreadyExistsException.class, () -> scheduleService.add(schedule));
+        assertThrows(EnitityAlreadyExistsException.class, () -> scheduleService.add(schedule));
     }
 
     @Test
-    void add_shouldReturnNewSchedule_whenAddNewSchedule() throws EntityIsAlreadyExistsException, InvalidEntityFieldException {
+    void add_shouldReturnNewSchedule_whenAddNewSchedule() {
         when(scheduleDao.getAll()).thenReturn(getSchedules());
         Faculty faculty = new Faculty(1, "Programming");
         LocalDate date = LocalDate.of(2021, 9, 6);
@@ -135,7 +135,7 @@ class ScheduleServiceImplTest {
     }
 
     @Test
-    void getById_shouldReturnCorrectScheduleByGivenId() throws EntityNotFoundException {
+    void getById_shouldReturnCorrectScheduleByGivenId() {
         Schedule expected = getSchedules().get(0);
         when(scheduleDao.getById(1)).thenReturn(Optional.of(expected));
         when(lectureDao.getById(1)).thenReturn(Optional.of(getLectures().get(0)));
@@ -202,11 +202,11 @@ class ScheduleServiceImplTest {
         Faculty faculty = new Faculty(1, "Programming");
         LocalDate date = LocalDate.of(2021, 9, 1);
         Schedule schedule = new Schedule(1, null, date, faculty);
-        assertThrows(EntityIsAlreadyExistsException.class, () -> scheduleService.update(schedule));
+        assertThrows(EnitityAlreadyExistsException.class, () -> scheduleService.update(schedule));
     }
 
     @Test
-    void update_shouldCorrectlyUpdateSchedule() throws EntityIsAlreadyExistsException, EntityNotFoundException, InvalidEntityFieldException {
+    void update_shouldCorrectlyUpdateSchedule() {
         when(scheduleDao.getAll()).thenReturn(getSchedules());
         Faculty faculty = new Faculty(1, "Programming");
         LocalDate date = LocalDate.of(2021, 9, 6);
@@ -232,7 +232,7 @@ class ScheduleServiceImplTest {
     }
 
     @Test
-    void deleteById_shouldDeleteSchedule_whenScheduleHasNoReferences() throws EntityHasReferenceException, EntityNotFoundException {
+    void deleteById_shouldDeleteSchedule_whenScheduleHasNoReferences() {
         Faculty faculty = new Faculty(1, "Programming");
         LocalDate date = LocalDate.of(2021, 9, 4);
         Schedule schedule = new Schedule(1, new ArrayList<>(), date, faculty);
@@ -286,11 +286,11 @@ class ScheduleServiceImplTest {
         Faculty faculty = new Faculty(1, "Programming");
         LocalDate date = LocalDate.of(2021, 9, 1);
         List<Schedule> schedules = Arrays.asList(new Schedule(null, null, date, faculty));
-        assertThrows(EntityIsAlreadyExistsException.class, () -> scheduleService.addAll(schedules));
+        assertThrows(EnitityAlreadyExistsException.class, () -> scheduleService.addAll(schedules));
     }
 
     @Test
-    void addAll_shouldCorrectlyAddAllSchedules() throws EntityIsAlreadyExistsException, InvalidEntityFieldException {
+    void addAll_shouldCorrectlyAddAllSchedules() {
         when(scheduleDao.getAll()).thenReturn(getSchedules());
         Faculty faculty = new Faculty(1, "Programming");
         LocalDate date = LocalDate.of(2021, 9, 6);

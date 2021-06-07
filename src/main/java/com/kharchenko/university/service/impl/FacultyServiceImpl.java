@@ -5,7 +5,7 @@ import com.kharchenko.university.dao.FacultyDao;
 import com.kharchenko.university.dao.GroupDao;
 import com.kharchenko.university.dao.ScheduleDao;
 import com.kharchenko.university.exception.EntityHasReferenceException;
-import com.kharchenko.university.exception.EntityIsAlreadyExistsException;
+import com.kharchenko.university.exception.EnitityAlreadyExistsException;
 import com.kharchenko.university.exception.EntityNotFoundException;
 import com.kharchenko.university.exception.InvalidEntityFieldException;
 import com.kharchenko.university.model.Faculty;
@@ -29,7 +29,7 @@ public class FacultyServiceImpl implements FacultyService {
 
 
     @Override
-    public Faculty add(Faculty faculty) throws EntityIsAlreadyExistsException, InvalidEntityFieldException {
+    public Faculty add(Faculty faculty) {
         validateFaculty(faculty);
         return facultyDao.add(faculty);
     }
@@ -40,12 +40,12 @@ public class FacultyServiceImpl implements FacultyService {
     }
 
     @Override
-    public Faculty getById(Integer id) throws EntityNotFoundException {
+    public Faculty getById(Integer id) {
         return facultyDao.getById(id).orElseThrow(() -> new EntityNotFoundException("Faculty doesn't exist with id " + id));
     }
 
     @Override
-    public void update(Faculty faculty) throws EntityIsAlreadyExistsException, EntityNotFoundException, InvalidEntityFieldException {
+    public void update(Faculty faculty) {
         if (faculty.getId() == null) {
             throw new EntityNotFoundException("Faculty doesn't exist with id " + faculty.getId());
         }
@@ -54,7 +54,7 @@ public class FacultyServiceImpl implements FacultyService {
     }
 
     @Override
-    public boolean deleteById(Integer id) throws EntityNotFoundException, EntityHasReferenceException {
+    public boolean deleteById(Integer id) {
         Faculty faculty = getById(id);
         if (hasClassRooms(faculty)) {
             throw new EntityHasReferenceException("Faculty with id " + id + " has classrooms.");
@@ -69,27 +69,27 @@ public class FacultyServiceImpl implements FacultyService {
     }
 
     @Override
-    public void addAll(List<Faculty> faculties) throws EntityIsAlreadyExistsException, InvalidEntityFieldException {
+    public void addAll(List<Faculty> faculties) {
         for (Faculty faculty : faculties) {
             validateFaculty(faculty);
         }
         facultyDao.addAll(faculties);
     }
 
-    private void validateFacultyFields(Faculty faculty) throws InvalidEntityFieldException {
+    private void validateFacultyFields(Faculty faculty) {
         if (faculty.getName() == null || faculty.getName().isEmpty()) {
             throw new InvalidEntityFieldException("Faculty's name can't be empty or null");
         }
     }
 
-    private void checkIfUnique(Faculty faculty) throws EntityIsAlreadyExistsException {
+    private void checkIfUnique(Faculty faculty) {
         if (facultyDao.getAll().stream().map(Faculty::getName)
                 .anyMatch(name -> name.equals(faculty.getName()))) {
-            throw new EntityIsAlreadyExistsException("Faculty with name " + faculty.getName() + " is already exists");
+            throw new EnitityAlreadyExistsException("Faculty with name " + faculty.getName() + " is already exists");
         }
     }
 
-    private void validateFaculty(Faculty faculty) throws InvalidEntityFieldException, EntityIsAlreadyExistsException {
+    private void validateFaculty(Faculty faculty) {
         validateFacultyFields(faculty);
         checkIfUnique(faculty);
     }
