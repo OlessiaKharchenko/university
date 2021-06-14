@@ -1,9 +1,14 @@
+
+
 <div th:fragment="header" xmlns:th="http://www.thymeleaf.org">
-    <nav class="navbar navbar-expand-sm">
-        <img th:src="@{/images/logo.png}" style="width:130px;height:120px;">
+    <div class="top-bar ">
+        University contacts
+    </div>
+
+    <nav class="navbar navbar-expand-sm bg-#609843">
         <!-- Links -->
-        <ul class="nav justify-content-end nav-tabs nav-justified">
-            <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+        <ul class="navbar-nav justify-content-center nav-tabs nav-justified ml-auto mx-auto">
+            <li class="nav-item active"><a class="nav-link" href="/">Home</a></li>
             <li class="nav-item"><a class="nav-link" href="/faculties">Faculties</a></li>
             <li class="nav-item"><a class="nav-link" href="/classrooms">Classrooms</a></li>
             <li class="nav-item"><a class="nav-link" href="/groups">Groups</a></li>
@@ -15,3 +20,5 @@
         </ul>
     </nav>
 </div>
+
+

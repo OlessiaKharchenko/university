@@ -57,7 +57,7 @@ public class LectureController {
     }
 
     @PostMapping("/add")
-    public String addLecture(@ModelAttribute("lecture") LectureDto lectureDto, @RequestParam(value = "teacherSubjects")
+    public String addLecture(@ModelAttribute("lecture") LectureDto lectureDto, @RequestParam(value = "lectureGroups")
             List<Integer> lectureGroups) {
         List<Group> groups = lectureGroups.stream()
                 .map(groupService::getById)

@@ -116,7 +116,7 @@ public class ScheduleDaoImpl extends AbstractDao<Schedule> implements ScheduleDa
         if (lectures != null) {
             for (Lecture lecture : lectures) {
                 if (lecture.getId() == null) {
-                    lectureDao.addAll(lectures);
+                    lectureDao.add(lecture);
                 }
                 lectureDao.addLectureToSchedule(lecture, schedule);
             }

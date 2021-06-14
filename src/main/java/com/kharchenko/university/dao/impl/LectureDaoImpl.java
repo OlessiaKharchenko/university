@@ -187,7 +187,7 @@ public class LectureDaoImpl extends AbstractDao<Lecture> implements LectureDao {
         if (groups != null) {
             for (Group group : groups) {
                 if (group.getId() == null) {
-                    groupDao.addAll(groups);
+                    groupDao.add(group);
                 }
                 groupDao.addLectureToGroup(lecture, group);
             }
