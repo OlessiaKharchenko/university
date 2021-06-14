@@ -94,7 +94,7 @@ public class TeacherDaoImpl extends AbstractDao<Teacher> implements TeacherDao {
         if (subjects != null) {
             for (Subject subject : subjects) {
                 if (subject.getId() == null) {
-                    subjectDao.addAll(subjects);
+                    subjectDao.add(subject);
                 }
                 subjectDao.addTeacherToSubject(subject, teacher);
             }
