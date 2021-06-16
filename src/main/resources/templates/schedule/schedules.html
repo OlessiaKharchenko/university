@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Schedules</title>
     <link rel="stylesheet"
           href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
           integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
@@ -12,9 +12,17 @@
 
 <body style="background: #609843;">
 <header th:insert="fragments/header.html :: header"></header>
-<div class="container">
+
+<div style="margin-top: 10px" class="container">
     <button type="button" class="btn btn-danger" data-toggle="modal"
-            data-target="#addModal" data-whatever="@mdo"> Add New Schedule</button>
+            data-target="#addModal" data-whatever="@mdo"> Add New Schedule
+    </button>
+</div>
+
+
+
+<div style="margin-top: 20px" class="container">
+
     <table class="table table-striped table-hover table-responsive-md" bgcolor="white">
         <thead>
         <tr class="center">
@@ -31,11 +39,15 @@
         <tr th:each="schedule : ${schedules}">
             <td class="center" th:text="${schedule.id}"></td>
             <td class="center"  th:text="${schedule.date}"></td>
-            <td >
-                <option th:each="lecture : ${schedule.lectures}"
-                        th:text="${lecture.startTime} +' - '+ ${lecture.endTime} +' ' +${lecture.subject.name} +' '+
-                        ${lecture.teacher.firstName}+' '+ ${lecture.teacher.lastName}"></option>
+
+
+            <td class="center">
+                <a th:href="@{/schedules/lectures/{id}(id=${schedule.id})}" class="btn btn-outline-success">
+                    Show lectures for this date </a>
             </td>
+
+
+
             <td class="center"  th:text="${schedule.faculty.name}"></td>
             <td class="center" >
                 <a class="btn btn-outline-success">
@@ -55,7 +67,11 @@
         </tr>
         </tbody>
     </table>
+
+
 </div>
+
+
 <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addClassModalLabel"
      aria-hidden="true">
     <div class="modal-dialog" role="document">

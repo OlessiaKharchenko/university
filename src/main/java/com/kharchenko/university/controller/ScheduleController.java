@@ -66,4 +66,12 @@ public class ScheduleController {
         scheduleService.deleteById(id);
         return "redirect:/schedules";
     }
+
+    @GetMapping("/lectures/{id}")
+    public String getLectures(@PathVariable(value = "id") Integer id, Model model) {
+        Schedule schedule = scheduleService.getById(id);
+        model.addAttribute("lectures", schedule.getLectures());
+        model.addAttribute("date" , schedule.getDate());
+        return "schedule/lectures";
+    }
 }

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Lectures</title>
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+          integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
+          crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body style="background: #609843;">
+<header th:insert="fragments/header.html :: header"></header>
+
+<div style="margin-top: 15px; color:white;" class="center">
+   <h4 th:text="${date}"></h4>
+</div>
+
+<div style="margin-top: 10px" class="container">
+    <table class="table table-striped table-hover table-responsive-md" bgcolor="white">
+        <thead>
+        <tr class="center">
+            <th> ID</th>
+            <th> SUBJECT</th>
+            <th> TEACHER</th>
+            <th> CLASSROOM</th>
+            <th> GROUPS</th>
+            <th> START TIME</th>
+            <th> END TIME</th>
+            <th> ADD GROUP</th>
+            <th> EDIT</th>
+            <th> DELETE</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="lecture : ${lectures}">
+            <td class="center" th:text="${lecture.id}"></td>
+            <td class="center" th:text="${lecture.subject.name}"></td>
+            <td class="center" th:text="${lecture.teacher.firstName}  +' '+ ${lecture.teacher.lastName}"></td>
+            <td class="center" th:text="${lecture.classRoom.buildingNumber} +' '+${lecture.classRoom.roomNumber}"></td>
+            <td class="center">
+                <option th:each="group : ${lecture.groups}"
+                        th:text="${group.name}"></option>
+            </td>
+            <td class="center" th:text="${lecture.startTime}"></td>
+            <td class="center" th:text="${lecture.endTime}"></td>
+            <td class="center">
+                <a class="btn btn-outline-success">
+                    <img th:src="@{/images/add_icon.png}" width="32px" height="32px" alt="add">
+                </a>
+            </td>
+            <td class="center">
+                <button type="button" th:href="@{/{id}(id=${lecture.id})}" class="btn btn-outline-success">
+                    <img th:src="@{/images/edit.png}" width="32px" height="32px" alt="edit">
+                </button>
+            </td>
+            <td class="center">
+                <a th:href="@{/lectures/delete/{id}(id=${lecture.id})}" class="btn btn-outline-success">
+                    <img th:src="@{/images/delete.png}" width="32px" height="32px" alt="detele">
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>
